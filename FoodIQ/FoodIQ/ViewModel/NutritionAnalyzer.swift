@@ -47,3 +47,33 @@ class NutritionAnalyzer {
         return String(text[startIndex...endIndex])
     }
 }
+
+extension NutritionReport {
+    static func computeQualityScore(calories: Int, protein: Int, carbs: Int, fat: Int, sodium: Int) -> Double {
+        var score: Double = 5.0
+
+        // Check protein balance (should be >10% of calories ideally)
+        let proteinCalories = protein * 4
+        if Double(proteinCalories) / Double(max(calories, 1)) < 0.1 {
+            score -= 1.0
+        }
+
+        // High fat penalty
+        let fatCalories = fat * 9
+        if Double(fatCalories) / Double(max(calories, 1)) > 0.35 {
+            score -= 1.0
+        }
+
+        // High sodium penalty (>600mg / 100g is high)
+        if sodium > 600 {
+            score -= 1.0
+        }
+
+        // Too many carbs (especially if protein is low)
+        if carbs > 50 && protein < 5 {
+            score -= 1.0
+        }
+
+        return max(0.0, min(5.0, score))
+    }
+}

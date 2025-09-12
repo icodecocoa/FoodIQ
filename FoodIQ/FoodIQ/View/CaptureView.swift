@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct CaptureView: View {
+    @State private var showScanner = false
     @State private var showingImagePicker = false
     @State private var selectedImage: UIImage?
     @State private var report: NutritionReport?
@@ -41,6 +42,15 @@ struct CaptureView: View {
                 }
                 .padding()
                 
+                Button(action: {
+                    showScanner = true
+                }) {
+                    Label("Scan Barcode", systemImage: "barcode.viewfinder")
+                }
+                .sheet(isPresented: $showScanner) {
+                    ScanView()
+                }
+                
                 if selectedImage != nil {
                     Button("Analyze") {
                         analyzeFood()
@@ -76,7 +86,12 @@ struct CaptureView: View {
         entry.id = UUID()
         entry.timestamp = Date()
         entry.calories = report.calories
+        entry.protein = report.protein
+        entry.carbs = report.carbs
+        entry.fat = report.fat
+        entry.sodium = report.sodium
         entry.qualityScore = Int16(report.qualityScore)
+        entry.notes = report.notes
         
         do {
             try viewContext.save()
