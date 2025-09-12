@@ -94,7 +94,7 @@ The app safely extracts JSON between `{}` from Gemini responses before decoding 
 ---
 
 ## 🌟 Roadmap
-- Add barcode scanning for packaged foods  
+- Add barcode scanning for packaged foods - Implemented
 - Offline nutrition database fallback  
 - Meal planning & health insights  
 - Sync across devices with iCloud  
